@@ -26,6 +26,7 @@
   "dependencies": {
     "@types/node": "^8.0.29",
     "body-parser": "1.18.2",
+    "bson-objectid": "1.2.3",
     "cors": "2.8.4",
     "express": "4.16.3",
     "express-query-boolean": "2.0.0",

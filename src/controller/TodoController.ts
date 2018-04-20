@@ -1,5 +1,7 @@
 import { getMongoManager, getMongoRepository } from "typeorm";
 
+const ObjectID = require("bson-objectid");
+
 import { Todo } from "../entity/Todo";
 
 export class TodoController {
@@ -49,10 +51,7 @@ export class TodoController {
     try {
       const todo = await Todo.create(payload);
       await todo.save();
-      res.send({
-        message: "[i] NEW TODO CREATED",
-        todo
-      });
+      res.send({ message: "[i] NEW TODO CREATED", todo });
     } catch (error) {
       res.send(error);
     }
@@ -61,9 +60,7 @@ export class TodoController {
   public static async destroyAll(req, res, next) {
     try {
       await Todo.clear();
-      res.send({
-        message: "[i] ALL TODOS DELETED"
-      });
+      res.send({ message: "[i] ALL TODOS DELETED" });
     } catch (error) {
       res.send(error);
     }
@@ -75,9 +72,9 @@ export class TodoController {
     try {
       const deleted = await Todo.findOneById(id);
       deleted.remove();
-      console.log(`[i] TODO WITH ID ${id} DELETED`);
+      res.send({ message: "[i] TODO IS DELETED", id });
     } catch (error) {
-      console.log("[i] ERROR:", error);
+      res.send(error);
     }
   }
 
@@ -87,33 +84,32 @@ export class TodoController {
     try {
       const id = await Todo.findByText(text);
       await Todo.remove(id);
-      console.log("[i] ALL TODOS DELETED");
+      res.send({ message: "[i] ALL TODOS DELETED" });
     } catch (error) {
-      console.log("[i] ERROR:", error);
+      res.send(error);
     }
   }
 
   public static async updateById(req, res, next) {
-    const repository = getMongoManager();
-
+    const mongo = getMongoRepository(Todo);
     const id = req.params.id;
-    const newText = req.body.text;
+
+    let payload = {};
+    if (req.body.text) payload.text = req.body.text;
+    if (req.body.bookmark) payload.bookmark = req.body.bookmark;
 
     try {
-      const updated = await repository.findOneAndUpdate(
-        Todo,
-        { id: id },
-        { text: newText, updated_at: new Date() },
+      const result = await mongo.findOneAndUpdate(
+        { _id: ObjectID(id) },
+        { $set: payload },
         { upsert: true }
       );
-      // await updated.updateOne({ text: newText });
-      console.log({
+      res.send({
         message: `[i] TODO IS UPDATED`,
-        id: id,
-        data: updated
+        payload
       });
     } catch (error) {
-      console.log("[i] ERROR:", error);
+      res.send(error);
     }
   }
 }
