@@ -93,10 +93,9 @@ export class TodoController {
   public static async updateById(req, res, next) {
     const mongo = getMongoRepository(Todo);
     const id = req.params.id;
-
-    let payload = {};
-    if (req.body.text) payload.text = req.body.text;
-    if (req.body.bookmark) payload.bookmark = req.body.bookmark;
+    const payload = {
+      text: req.body.text
+    };
 
     try {
       const result = await mongo.findOneAndUpdate(
