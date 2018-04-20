@@ -1,8 +1,21 @@
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  Generated,
+  ObjectID,
+  ObjectIdColumn
+} from "typeorm";
+
+const cuid = require("cuid");
 
 @Entity("todos")
 export class Todo extends BaseEntity {
   @ObjectIdColumn() id: ObjectID;
+
+  @Column()
+  @Generated("uuid")
+  idn: string;
 
   @Column() text: string;
 
