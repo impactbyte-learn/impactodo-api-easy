@@ -62,7 +62,8 @@ export class TodoController {
     const id = req.params.id;
 
     try {
-      await Todo.removeById(id);
+      const deleted = await Todo.findOneById(id);
+      deleted.remove();
       console.log(`[i] TODO WITH ID ${id} DELETED`);
     } catch (error) {
       console.log("[i] ERROR", error);
