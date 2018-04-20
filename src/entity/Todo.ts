@@ -8,6 +8,8 @@ export class Todo extends BaseEntity {
 
   @Column("datetime") created_at: Date;
 
+  @Column("boolean") bookmark: boolean;
+
   public static async findByText(text: string): Promise<Todo[]> {
     return await this.find({ where: { text } });
   }

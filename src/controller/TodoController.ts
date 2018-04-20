@@ -31,7 +31,8 @@ export class TodoController {
   public static async create(req, res, next) {
     const payload = {
       text: req.body.text,
-      created_at: new Date()
+      created_at: new Date(),
+      bookmark: false
     };
 
     try {
