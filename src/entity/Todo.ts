@@ -17,4 +17,8 @@ export class Todo extends BaseEntity {
   findText(text) {
     return Todo.find({ where: { text } });
   }
+
+  public static async findByBookmark(condition: boolean): Promise<Todo[]> {
+    return await this.find({ where: { bookmark: condition } });
+  }
 }

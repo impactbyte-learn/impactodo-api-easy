@@ -5,6 +5,7 @@ import * as express from "express";
 import * as cors from "cors";
 import * as morgan from "morgan";
 import * as bodyParser from "body-parser";
+import * as boolParser from "express-query-boolean";
 
 import { RootRoutes } from "./routes/RootRoutes";
 import { TodoRoutes } from "./routes/TodoRoutes";
@@ -21,6 +22,7 @@ createConnection()
     app.use(morgan("combined"));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+    app.use(boolParser());
 
     // register all application routes
     app.use("/", RootRoutes);

@@ -28,6 +28,17 @@ export class TodoController {
     }
   }
 
+  public static async findByBookmark(req, res, next) {
+    const bookmark = req.query.bookmark;
+
+    try {
+      const todos = await Todo.findByBookmark(bookmark);
+      res.send(todos);
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
   public static async create(req, res, next) {
     const payload = {
       text: req.body.text,
