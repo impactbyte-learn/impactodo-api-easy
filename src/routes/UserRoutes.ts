@@ -4,9 +4,9 @@ import { UserController } from "../controller/UserController";
 export const UserRoutes: express.Router = express
   .Router()
   .get("/", UserController.findAll)
-  // .get("/:id", UserController.findById)
-  // .get("/", UserController.findByText)
-  // .post("/", UserController.create)
+  .get("/", UserController.findByEmail)
+  .get("/:id", UserController.findById)
+  .post("/", UserController.register)
   .put("/:id", UserController.updateById)
   .delete("/", UserController.destroyAll)
   .delete("/:id", UserController.destroyById);

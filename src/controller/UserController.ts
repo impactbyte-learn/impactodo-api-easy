@@ -1,40 +1,59 @@
 import { User } from "../entity/User";
 
 export class UserController {
-  public static async findAll() {
+  public static async findAll(req, res, next) {
     try {
       const users = await User.find();
-      console.log(users);
+      res.send(users);
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async findByEmail(text) {
+  public static async findById(req, res, next) {
+    try {
+      const users = await User.findOneById(req.params.id);
+      res.send(users);
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  public static async findByEmail(req, res, next) {
+    const text = req.body.text;
+
     try {
       const users = await User.findByEmail(text);
-      console.log(users);
+      res.send(users);
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async register(email, password) {
+  public static async register(req, res, next) {
+    const email = req.body.email;
+    const password = req.body.password;
+
     try {
       const payload = {
         email,
-        password,
-        created_at: new Date()
+        password
       };
       const user = await User.create(payload);
       user.save();
-      console.log("[i] NEW USER REGISTERED", user);
+      res.send({
+        message: "[i] NEW USER REGISTERED",
+        user
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async login(email, password) {
+  public static async login(req, res, next) {
+    const email = req.body.email;
+    const password = req.body.password;
+
     try {
       const payload = {
         email,
@@ -42,46 +61,65 @@ export class UserController {
       };
       const user = await User.findOne(payload);
       user.save();
-      console.log("[i] USER LOGGED IN", user);
+      res.send({
+        message: "[i] USER LOGGED IN",
+        user
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async destroyAll() {
+  public static async destroyAll(req, res, next) {
     try {
       await User.clear();
-      console.log("[i] ALL USERS DELETED");
+      res.send({
+        message: "[i] ALL USERS DELETED"
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async destroyById(id: string) {
+  public static async destroyById(req, res, next) {
+    const id = req.params.id;
+
     try {
       await User.removeById(id);
-      console.log(`[i] USER WITH ID ${id} DELETED`);
+      res.send({
+        message: `[i] USER WITH ID ${id} DELETED`
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async destroyByEmail(text: string) {
+  public static async destroyByEmail(req, res, next) {
+    const email = req.body.email;
+
     try {
-      const id = await User.findByEmail(text);
+      const id = await User.findByEmail(email);
       await User.remove(id);
-      console.log("[i] ALL USERS DELETED");
+      res.send({
+        message: "[i] USER IS DELETED",
+        email
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async updateById(id: string, email: string) {
+  public static async updateById(req, res, next) {
+    const id = req.params.id;
+    const email = req.body.email;
+
     try {
       await User.updateById(id, { email });
-      console.log(`[i] USER WITH ID ${id} IS UPDATED`);
+      res.send({
+        message: `[i] USER WITH ID ${id} IS UPDATED`
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 }
