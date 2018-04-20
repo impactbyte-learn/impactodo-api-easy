@@ -3,10 +3,10 @@ import { TodoController } from "../controller/TodoController";
 
 export const TodoRoutes: express.Router = express
   .Router()
-  .get("/:id", TodoController.findById)
   .get("/", TodoController.findByBookmark)
-  .get("/", TodoController.findAll)
   .get("/", TodoController.findByText)
+  .get("/", TodoController.findAll)
+  .get("/:id", TodoController.findById)
   .post("/", TodoController.create)
   .put("/:id", TodoController.updateById)
   .delete("/", TodoController.destroyAll)

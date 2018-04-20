@@ -1,3 +1,5 @@
+import { getMongoManager, getMongoRepository } from "typeorm";
+
 import { Todo } from "../entity/Todo";
 
 export class TodoController {
@@ -41,9 +43,7 @@ export class TodoController {
 
   public static async create(req, res, next) {
     const payload = {
-      text: req.body.text,
-      created_at: new Date(),
-      bookmark: false
+      text: req.body.text
     };
 
     try {
@@ -70,36 +70,50 @@ export class TodoController {
   }
 
   public static async destroyById(req, res, next) {
-    const id = req.params.id;
+    const id: string = req.params.id;
 
     try {
       const deleted = await Todo.findOneById(id);
       deleted.remove();
       console.log(`[i] TODO WITH ID ${id} DELETED`);
     } catch (error) {
-      console.log("[i] ERROR", error);
+      console.log("[i] ERROR:", error);
     }
   }
 
-  public static async destroyByText(text: string) {
+  public static async destroyByText(req, res, next) {
+    const text: string = req.query.text;
+
     try {
       const id = await Todo.findByText(text);
       await Todo.remove(id);
       console.log("[i] ALL TODOS DELETED");
     } catch (error) {
-      console.log("[i] ERROR", error);
+      console.log("[i] ERROR:", error);
     }
   }
 
   public static async updateById(req, res, next) {
+    const repository = getMongoManager();
+
     const id = req.params.id;
     const newText = req.body.text;
 
     try {
-      await Todo.updateById(id, { text: newText });
-      console.log(`[i] TODO WITH ID ${id} IS UPDATED`);
+      const updated = await repository.findOneAndUpdate(
+        Todo,
+        { id: id },
+        { text: newText, updated_at: new Date() },
+        { upsert: true }
+      );
+      // await updated.updateOne({ text: newText });
+      console.log({
+        message: `[i] TODO IS UPDATED`,
+        id: id,
+        data: updated
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      console.log("[i] ERROR:", error);
     }
   }
 }

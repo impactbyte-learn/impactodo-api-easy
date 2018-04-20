@@ -31,7 +31,10 @@ createConnection()
 
     // run app
     app.listen(PORT, () => {
-      console.log(`Impact Todo API is listening on :${PORT}`);
+      console.log({
+        message: `Impact Todo API is listening on :${PORT}`,
+        datetime: new Date()
+      });
     });
   })
   .catch(error => console.log("Error: ", error));
