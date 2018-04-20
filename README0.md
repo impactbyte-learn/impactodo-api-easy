@@ -1,29 +1,17 @@
-# Impact Todo API (Easy version)
+# Code MongoDB
 
 * [MongoDB](https://mongodb.com)
 * [`mongodb`](https://www.npmjs.com/package/mongodb)
 
-Database:
-
 ```sh
 sudo service mongod start
-sudo service postgresql start
 ```
-
-Installation:
 
 ```sh
 npm install
 ```
 
-Development:
-
 ```sh
-npm run dev
-```
-
-Start:
-
-```sh
-npm run start
+node test-mongodb.js
+node test-mongoose.js
 ```
