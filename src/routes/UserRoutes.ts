@@ -1,5 +1,6 @@
 import * as express from "express";
 import { UserController } from "../controller/UserController";
+import { AuthMiddleware } from "../middleware/AuthMiddleware";
 
 export const UserRoutes: express.Router = express
   .Router()
@@ -8,6 +9,6 @@ export const UserRoutes: express.Router = express
   .get("/:id", UserController.findById)
   .post("/register", UserController.register)
   .post("/login", UserController.login)
-  .put("/:id", UserController.updateById)
-  .delete("/", UserController.destroyAll)
-  .delete("/:id", UserController.destroyById);
+  .put("/:id", AuthMiddleware.checkToken, UserController.updateById)
+  .delete("/", AuthMiddleware.checkToken, UserController.destroyAll)
+  .delete("/:id", AuthMiddleware.checkToken, UserController.destroyById);

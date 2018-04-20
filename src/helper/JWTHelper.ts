@@ -10,4 +10,12 @@ export class JWTHelper {
       return error;
     }
   }
+
+  public static async verifyToken(token) {
+    try {
+      return await jwt.verify(token, "supersecretsecret");
+    } catch (error) {
+      return error;
+    }
+  }
 }

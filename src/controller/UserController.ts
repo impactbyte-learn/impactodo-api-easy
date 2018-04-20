@@ -44,8 +44,6 @@ export class UserController {
       password: hash
     };
 
-    console.log(payload);
-
     try {
       const user = await User.create(payload);
       await user.save();
