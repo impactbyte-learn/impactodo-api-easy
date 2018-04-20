@@ -24,7 +24,7 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   id: ObjectID;
 
-  @Column()
+  @Column({ unique: true })
   @IsNotEmpty()
   email: string;
 
@@ -48,5 +48,9 @@ export class User extends BaseEntity {
 
   public static async findByEmail(email: string): Promise<User[]> {
     return await this.find({ where: { email } });
+  }
+
+  public static async findOneByEmail(email: string): Promise<User> {
+    return await this.findOne({ where: { email } });
   }
 }

@@ -57,19 +57,22 @@ export class UserController {
   }
 
   public static async login(req, res, next) {
-    const email = req.body.email;
-    const password = req.body.password;
+    const payload = {
+      email: req.body.email,
+      password: req.body.password
+    };
 
     try {
-      const payload = {
-        email,
-        password
-      };
-      const user = await User.findOne(payload);
-      user.save();
+      const user = await User.findOneByEmail(payload.email);
+      const validatedPassword = await bcrypt.compare(
+        payload.password,
+        user.password
+      );
+      delete user.password;
       res.send({
         message: "[i] USER LOGGED IN",
-        user
+        user,
+        validatedPassword
       });
     } catch (error) {
       res.send(error);
