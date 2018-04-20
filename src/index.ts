@@ -6,11 +6,13 @@ import * as cors from "cors";
 import * as morgan from "morgan";
 import * as bodyParser from "body-parser";
 
+import { RootRoutes } from "./routes/RootRoutes";
+import { TodoRoutes } from "./routes/TodoRoutes";
+import { UserRoutes } from "./routes/UserRoutes";
+
 // connection settings are in the "ormconfig.json" file
 createConnection()
   .then(async connection => {
-    // EXPRESS CODE HERE
-
     // create express app
     const app = express();
     const PORT = process.env.PORT || 3000;

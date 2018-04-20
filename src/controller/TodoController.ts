@@ -1,48 +1,65 @@
 import { Todo } from "../entity/Todo";
 
 export class TodoController {
-  public static async findAll() {
+  public static async findAll(req, res, next) {
     try {
       const todos = await Todo.find();
-      console.log(todos);
+      res.send(todos);
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async findByText(text) {
+  public static async findById(req, res, next) {
     try {
-      const todos = await Todo.findByText(text);
-      console.log(todos);
+      const todos = await Todo.findOneById(req.params.id);
+      res.send(todos);
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async create(text) {
+  public static async findByText(req, res, next) {
     try {
-      const payload = {
-        text,
-        created_at: new Date()
-      };
+      const todos = await Todo.findByText(req.query.text);
+      res.send(todos);
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  public static async create(req, res, next) {
+    const payload = {
+      text: req.body.text,
+      created_at: new Date()
+    };
+
+    try {
       const todo = await Todo.create(payload);
-      todo.save();
-      console.log("[i] NEW TODO CREATED", todo);
+      await todo.save();
+      res.send({
+        message: "[i] NEW TODO CREATED",
+        todo
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async destroyAll() {
+  public static async destroyAll(req, res, next) {
     try {
       await Todo.clear();
-      console.log("[i] ALL TODOS DELETED");
+      res.send({
+        message: "[i] ALL TODOS DELETED"
+      });
     } catch (error) {
-      console.log("[i] ERROR", error);
+      res.send(error);
     }
   }
 
-  public static async destroyById(id: string) {
+  public static async destroyById(req, res, next) {
+    const id = req.params.id;
+
     try {
       await Todo.removeById(id);
       console.log(`[i] TODO WITH ID ${id} DELETED`);
@@ -61,7 +78,10 @@ export class TodoController {
     }
   }
 
-  public static async updateById(id: string, newText: string) {
+  public static async updateById(req, res, next) {
+    const id = req.params.id;
+    const newText = req.body.text;
+
     try {
       await Todo.updateById(id, { text: newText });
       console.log(`[i] TODO WITH ID ${id} IS UPDATED`);
