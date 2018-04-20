@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt-as-promised");
+const jwt = require("jsonwebtoken");
 
 import { User } from "../entity/User";
+import { JWTHelper } from "../helper/JWTHelper";
 
 export class UserController {
   public static async findAll(req, res, next) {
@@ -63,16 +65,23 @@ export class UserController {
     };
 
     try {
-      const user = await User.findOneByEmail(payload.email);
+      const foundUser = await User.findOneByEmail(payload.email);
       const validatedPassword = await bcrypt.compare(
         payload.password,
-        user.password
+        foundUser.password
       );
-      delete user.password;
+      const user = {
+        sub: foundUser.id,
+        email: foundUser.email
+      };
+
+      const token = await JWTHelper.signToken(user);
+
       res.send({
         message: "[i] USER LOGGED IN",
         user,
-        validatedPassword
+        validatedPassword,
+        token
       });
     } catch (error) {
       res.send(error);
