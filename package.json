@@ -25,7 +25,11 @@
   },
   "dependencies": {
     "@types/node": "^8.0.29",
+    "body-parser": "1.18.2",
+    "cors": "2.8.4",
+    "express": "4.16.3",
     "mongodb": "^2.2.31",
+    "morgan": "1.9.0",
     "mysql": "2.15.0",
     "reflect-metadata": "^0.1.10",
     "typeorm": "^0.1.0"
