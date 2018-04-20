@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt-as-promised");
+
 import { User } from "../entity/User";
 
 export class UserController {
@@ -33,14 +35,18 @@ export class UserController {
   public static async register(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
+    const hash = await bcrypt.hash(password, 10);
+
+    const payload = {
+      email,
+      password: hash
+    };
+
+    console.log(payload);
 
     try {
-      const payload = {
-        email,
-        password
-      };
       const user = await User.create(payload);
-      user.save();
+      await user.save();
       res.send({
         message: "[i] NEW USER REGISTERED",
         user

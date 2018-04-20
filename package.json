@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@types/node": "^8.0.29",
+    "bcrypt": "2.0.0",
+    "bcrypt-as-promised": "1.1.0",
     "body-parser": "1.18.2",
     "bson-objectid": "1.2.3",
     "class-validator": "0.8.5",

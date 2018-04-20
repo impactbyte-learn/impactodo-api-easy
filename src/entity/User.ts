@@ -4,7 +4,7 @@ import { IsNotEmpty, IsInt, IsBoolean, IsArray, IsDate } from "class-validator";
 
 import { Todo } from "./Todo";
 
-@Entity()
+@Entity("users")
 export class User extends BaseEntity {
   constructor(
     email: string,
