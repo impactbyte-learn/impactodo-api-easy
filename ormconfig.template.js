@@ -1,6 +1,6 @@
 const env = process.env.NODE_ENV;
 
-module.exports =
+const options =
   env === "development"
     ? {
         type: "mongodb",
@@ -14,16 +14,14 @@ module.exports =
       }
     : {
         type: "mongodb",
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        host: "localhost",
+        host: process.env.DB_HOST || "text.mlab.com",
+        port: process.env.DB_PORT || 27017,
         database: "impactodo",
+        username: process.env.DB_USERNAME || "admin",
+        password: process.env.DB_PASSWORD || "adminpassword",
         synchronize: true,
-        logging: false,
-        entities: ["build/entity/*.js"],
-        cli: {
-          entitiesDir: "src/entity",
-          migrationsDir: "src/migration",
-          subscribersDir: "src/subscriber"
-        }
+        logging: ["query", "error"],
+        entities: ["build/entity/*.js"]
       };
+
+module.exports = options;
