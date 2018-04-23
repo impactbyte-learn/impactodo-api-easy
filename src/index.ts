@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { Connection, createConnection } from "typeorm";
 
 import * as express from "express";
 import * as cors from "cors";
@@ -11,7 +11,8 @@ import { RootRoutes } from "./routes/RootRoutes";
 import { TodoRoutes } from "./routes/TodoRoutes";
 import { UserRoutes } from "./routes/UserRoutes";
 
-// connection settings are in the "ormconfig.json" file
+const OPTIONS = require("../ormconfig");
+
 createConnection()
   .then(async connection => {
     // create express app
@@ -33,7 +34,8 @@ createConnection()
     app.listen(PORT, () => {
       console.log({
         message: `Impact Todo API is listening on :${PORT}`,
-        datetime: new Date()
+        datetime: new Date(),
+        options: OPTIONS
       });
     });
   })
