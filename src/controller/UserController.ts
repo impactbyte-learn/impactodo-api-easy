@@ -16,7 +16,14 @@ export class UserController {
 
   public static async findById(req, res, next) {
     try {
-      const users = await User.findOneById(req.params.id);
+      const users = await User.findOneById(req.params.id, {
+        join: {
+          alias: "user",
+          innerJoinAndSelect: {
+            user: "user.todos"
+          }
+        }
+      });
       res.send(users);
     } catch (error) {
       res.send(error);

@@ -44,12 +44,10 @@ export class TodoController {
   }
 
   public static async create(req, res, next) {
-    const payload = {
-      text: req.body.text
-    };
-
     try {
-      const todo = await Todo.create(payload);
+      const todo = await Todo.create();
+      todo.text = req.body.text;
+      todo.author = ObjectID("5ad9cfe8ca1901168589843a");
       await todo.save();
       res.send({ message: "[i] NEW TODO CREATED", todo });
     } catch (error) {

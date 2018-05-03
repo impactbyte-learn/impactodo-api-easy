@@ -4,9 +4,12 @@ import {
   Column,
   Generated,
   ObjectID,
-  ObjectIdColumn
+  ObjectIdColumn,
+  ManyToOne
 } from "typeorm";
 import { IsNotEmpty, IsInt, IsBoolean, IsDate } from "class-validator";
+
+import { User } from "./User";
 
 const cuid = require("cuid");
 
@@ -15,12 +18,14 @@ export class Todo extends BaseEntity {
   constructor(
     text: string,
     bookmark: string,
+    author,
     created_at: Date,
     updated_at: Date
   ) {
     super();
     this.text = text;
     this.bookmark = false;
+    this.author = author;
     this.created_at = new Date();
     this.updated_at = new Date();
   }
@@ -41,6 +46,10 @@ export class Todo extends BaseEntity {
   @IsNotEmpty()
   @IsBoolean()
   bookmark: boolean;
+
+  @Column()
+  @ManyToOne(type => User, user => user.todos)
+  author: User;
 
   @Column("datetime")
   @IsNotEmpty()

@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ObjectID,
+  ObjectIdColumn,
+  OneToMany
+} from "typeorm";
 
 import { IsNotEmpty, IsInt, IsBoolean, IsArray, IsDate } from "class-validator";
 
@@ -9,6 +16,7 @@ export class User extends BaseEntity {
   constructor(
     email: string,
     password: string,
+    todos,
     created_at: Date,
     updated_at: Date
   ) {
@@ -32,7 +40,7 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   password: string;
 
-  @Column(type => Todo)
+  @OneToMany(type => Todo, todo => todo.author)
   @IsArray()
   todos: Todo[];
 
