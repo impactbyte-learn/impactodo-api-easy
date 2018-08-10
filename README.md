@@ -1,5 +1,7 @@
 # Impact Todo API (Easy version)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/impactbyte-learn/impactodo-api-easy.svg)](https://greenkeeper.io/)
+
 * [MongoDB](https://mongodb.com)
 * [`mongodb`](https://www.npmjs.com/package/mongodb)
 
